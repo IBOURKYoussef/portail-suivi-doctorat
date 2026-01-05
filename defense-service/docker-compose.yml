@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  defense-service:
+    build: .
+    container_name: defense-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - DB_HOST=postgres-defenses
+      - DB_PORT=5432
+      - DB_NAME=defense_db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+    depends_on:
+      - postgres-defenses
+      - kafka
+      - eureka-server
+    networks:
+      - microservices-network
+
+  postgres-defenses:
+    image: postgres:15-alpine
+    container_name: postgres-defenses
+    environment:
+      - POSTGRES_DB=defense_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-defenses-data:/var/lib/postgresql/data
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    external: true
+
+volumes:
+  postgres-defenses-data:

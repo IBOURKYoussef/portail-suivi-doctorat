@@ -1,0 +1,134 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        # Route pour Auth (PRIORITAIRE - doit être avant /api/users/**)
+        - id: auth-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/auth/**
+        
+        # Route pour User Service - API direct
+        - id: user-service-api
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/users/**
+            
+        # Route pour User Service - avec réécriture
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/users/**
+          filters:
+            - RewritePath=/users/(?<segment>.*), /api/users/$\{segment}
+            
+        # Route pour Registration Service - API direct
+        - id: registration-service-api
+          uri: lb://REGISTRATION-SERVICE
+          predicates:
+            - Path=/api/registration/**
+        
+        # Route pour Registration Service - avec réécriture
+        - id: registration-service
+          uri: lb://REGISTRATION-SERVICE
+          predicates:
+            - Path=/registration/**
+          filters:
+            - RewritePath=/registration/(?<segment>.*), /api/registration/$\{segment}
+            
+        # Route pour Registration Service - /api/campaigns/** (route spécifique)
+        - id: registration-service-campaigns
+          uri: lb://REGISTRATION-SERVICE
+          predicates:
+            - Path=/api/campaigns/**
+            
+        # Route pour Registration Service - /api/registrations/** (route principale)
+        - id: registration-service-registrations
+          uri: lb://REGISTRATION-SERVICE
+          predicates:
+            - Path=/api/registrations/**
+            
+        # Route pour Defense Service - /api/defenses/** (controller actuel)
+        - id: defense-service-defenses
+          uri: lb://DEFENSE-SERVICE
+          predicates:
+            - Path=/api/defenses/**
+        
+        # Route pour Defense Service - /api/rapporteurs/** (nouveaux endpoints)
+        - id: defense-service-rapporteurs
+          uri: lb://DEFENSE-SERVICE
+          predicates:
+            - Path=/api/rapporteurs/**
+        
+        # Route pour Defense Service - /api/documents/** (gestion documents)
+        - id: defense-service-documents
+          uri: lb://DEFENSE-SERVICE
+          predicates:
+            - Path=/api/documents/**
+            
+        # Route pour Defense Service - API direct /api/defense/**
+        - id: defense-service-api
+          uri: lb://DEFENSE-SERVICE
+          predicates:
+            - Path=/api/defense/**
+        
+        # Route pour Defense Service - avec réécriture
+        - id: defense-service
+          uri: lb://DEFENSE-SERVICE
+          predicates:
+            - Path=/defense/**
+          filters:
+            - RewritePath=/defense/(?<segment>.*), /api/defense/$\{segment}
+            
+        # Route pour Notification Service - API direct
+        - id: notification-service-api
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/api/notification/**
+        
+        # Route pour Notification Service - avec réécriture
+        - id: notification-service
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/notification/**
+          filters:
+            - RewritePath=/notification/(?<segment>.*), /api/notification/$\{segment}
+            
+        # Route pour Notification Service - /api/notifications/** (controller actuel)
+        - id: notification-service-notifications
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/api/notifications/**
+      
+      # Configuration globale
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
+        - PreserveHostHeader  # Préserver le host original
+      # CORS géré par SecurityConfig.java - ne pas dupliquer ici
+
+# Configuration JWT
+jwt:
+  secret: myVerySecureSecretKeyForJWTTokenGenerationThatIsAtLeast256BitsLong
+  expiration: 86400000  # 24 heures
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+  endpoint:
+    gateway:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.loadbalancer: DEBUG
+    org.springframework.web.reactive: DEBUG
+    reactor.netty: DEBUG
+    ma.spring.cloud.apigateway: DEBUG

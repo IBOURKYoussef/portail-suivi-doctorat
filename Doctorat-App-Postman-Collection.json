@@ -1,0 +1,522 @@
+{
+	"info": {
+		"_postman_id": "doctorat-app-2025",
+		"name": "Doctorat Application - Tests Complets",
+		"description": "Collection Postman complète pour tester tous les endpoints de l'application Doctorat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Infrastructure",
+			"item": [
+				{
+					"name": "Health Check - API Gateway",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/actuator/health",
+							"host": ["{{base_url}}"],
+							"path": ["actuator", "health"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health Check - Eureka",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8761/actuator/health",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8761",
+							"path": ["actuator", "health"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Services Enregistrés - Eureka",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8761/eureka/apps",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8761",
+							"path": ["eureka", "apps"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Authentification",
+			"item": [
+				{
+					"name": "Inscription - Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200 || pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.token) {",
+									"        pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+									"        pm.collectionVariables.set(\"user_id\", jsonData.user.id);",
+									"        console.log(\"Token enregistré: \" + jsonData.token.substring(0, 30) + \"...\");",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin_test\",\n    \"password\": \"Admin123!\",\n    \"email\": \"admin@doctorat.ma\",\n    \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Connexion - Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+									"    if (jsonData.user) {",
+									"        pm.collectionVariables.set(\"user_id\", jsonData.user.id);",
+									"    }",
+									"    console.log(\"Token enregistré: \" + jsonData.token.substring(0, 30) + \"...\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin_test\",\n    \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Inscription - Doctorant",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"doctorant_test\",\n    \"password\": \"Doctorant123!\",\n    \"email\": \"doctorant@doctorat.ma\",\n    \"role\": \"DOCTORANT\",\n    \"firstName\": \"Ahmed\",\n    \"lastName\": \"Bennani\",\n    \"studentId\": \"DOC2025001\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Inscription - Directeur Thèse",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"directeur_test\",\n    \"password\": \"Directeur123!\",\n    \"email\": \"directeur@doctorat.ma\",\n    \"role\": \"DIRECTEUR_THESE\",\n    \"firstName\": \"Mohammed\",\n    \"lastName\": \"Alaoui\",\n    \"laboratoire\": \"LaboIA\",\n    \"grade\": \"Professeur\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. User Service",
+			"item": [
+				{
+					"name": "Liste tous les utilisateurs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtenir un utilisateur par ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users/{{user_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "{{user_id}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mettre à jour un utilisateur",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Ahmed\",\n    \"lastName\": \"Updated\",\n    \"phone\": \"+212612345678\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/{{user_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "{{user_id}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Defense Service",
+			"item": [
+				{
+					"name": "Créer une demande de soutenance",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Intelligence Artificielle et Big Data\",\n    \"description\": \"Thèse sur l'application de l'IA dans le Big Data\",\n    \"proposedDate\": \"2025-06-15T10:00:00\",\n    \"location\": \"Amphithéâtre A\",\n    \"juryMembers\": [\n        {\n            \"name\": \"Prof. Hassan\",\n            \"email\": \"hassan@univ.ma\",\n            \"role\": \"Président\"\n        },\n        {\n            \"name\": \"Prof. Fatima\",\n            \"email\": \"fatima@univ.ma\",\n            \"role\": \"Rapporteur\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/defense/requests",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defense", "requests"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Liste des soutenances",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/defense/requests",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defense", "requests"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approuver une soutenance",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"APPROVED\",\n    \"comments\": \"Demande approuvée\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/defense/requests/1/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defense", "requests", "1", "status"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5. Registration Service",
+			"item": [
+				{
+					"name": "Créer une campagne",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Campagne Doctorat 2025-2026\",\n    \"description\": \"Inscription au doctorat pour l'année universitaire 2025-2026\",\n    \"startDate\": \"2025-01-01\",\n    \"endDate\": \"2025-03-31\",\n    \"maxApplications\": 100\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/registration/campaigns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "registration", "campaigns"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Liste des campagnes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/registration/campaigns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "registration", "campaigns"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Soumettre une candidature",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"campaignId\": 1,\n    \"researchProposal\": \"Ma proposition de recherche porte sur...\",\n    \"motivationLetter\": \"Je souhaite intégrer ce programme car...\",\n    \"academicBackground\": \"Master en Informatique avec mention Très Bien\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/registration/applications",
+							"host": ["{{base_url}}"],
+							"path": ["api", "registration", "applications"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Liste des candidatures",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/registration/applications",
+							"host": ["{{base_url}}"],
+							"path": ["api", "registration", "applications"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "6. Notification Service",
+			"item": [
+				{
+					"name": "Envoyer une notification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nouvelle campagne disponible\",\n    \"message\": \"Une nouvelle campagne d'inscription est ouverte\",\n    \"type\": \"INFO\",\n    \"recipientIds\": [],\n    \"sendToAll\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/notification/send",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notification", "send"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Liste des notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/notification/my-notifications",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notification", "my-notifications"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Marquer comme lu",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/notification/1/read",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notification", "1", "read"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "7. Tests Sécurité",
+			"item": [
+				{
+					"name": "Accès sans token (doit échouer 401)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accès avec token invalide (doit échouer 401)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid.token",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,1188 @@
+{
+	"info": {
+		"_postman_id": "doctorat-microservices-complete-2025",
+		"name": "Doctorat App - Tests par Workflows",
+		"description": "Collection organisée par workflows métier - Gestion des soutenances de thèse - Tests dans l'ordre d'exécution",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Setup - Authentification",
+			"item": [
+				{
+					"name": "Register ADMIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('admin_token', response.token);",
+									"    pm.environment.set('admin_id', response.user.id);",
+									"    console.log('✅ ADMIN créé - Token et ID sauvegardés');",
+									"    console.log('Token:', response.token.substring(0, 30) + '...');",
+									"    console.log('User ID:', response.user.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin_test\",\n  \"password\": \"admin123\",\n  \"email\": \"admin@doctorat.ma\",\n  \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register DIRECTEUR_THESE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('directeur_token', response.token);",
+									"    pm.environment.set('directeur_id', response.user.id);",
+									"    console.log('✅ DIRECTEUR_THESE créé - Token et ID sauvegardés');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"directeur_test\",\n  \"password\": \"directeur123\",\n  \"email\": \"directeur@doctorat.ma\",\n  \"role\": \"DIRECTEUR_THESE\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register DOCTORANT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('doctorant_token', response.token);",
+									"    pm.environment.set('doctorant_id', response.user.id);",
+									"    console.log('✅ DOCTORANT créé - Token et ID sauvegardés');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"doctorant_test\",\n  \"password\": \"doctorant123\",\n  \"email\": \"doctorant@doctorat.ma\",\n  \"role\": \"DOCTORANT\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register CANDIDAT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('candidat_token', response.token);",
+									"    pm.environment.set('candidat_id', response.user.id);",
+									"    console.log('✅ CANDIDAT créé - Token et ID sauvegardés');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"candidat_test\",\n  \"password\": \"candidat123\",\n  \"email\": \"candidat@doctorat.ma\",\n  \"role\": \"CANDIDAT\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('✅ Login réussi');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin_test\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Workflow Soutenance de Thèse",
+			"description": "Cycle complet : Création → Validation → Autorisation → Jury → Résultat",
+			"item": [
+				{
+					"name": "Create Defense Request (DOCTORANT)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('defense_id', response.id);",
+									"    console.log('✅ Défense créée - ID:', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"thesisTitle\": \"Architecture Microservices pour la Gestion des Soutenances de Thèse\",\n  \"thesisAbstract\": \"Cette thèse étudie l'application des patterns microservices dans un contexte universitaire pour la gestion des soutenances de thèse. L'approche proposée utilise Spring Cloud, Eureka et API Gateway.\",\n  \"researchField\": \"Génie Logiciel\",\n  \"laboratory\": \"Laboratoire d'Informatique\",\n  \"directorId\": {{directeur_id}},\n  \"publicationsCount\": 5,\n  \"conferencesCount\": 3,\n  \"trainingHours\": 300,\n  \"proposedDate\": \"2025-09-15T14:00:00\",\n  \"academicYear\": 2025\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/defenses",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Defenses (DOCTORANT)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/defenses/my",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "my"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending Defenses (ADMIN)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/defenses/admin/pending",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "admin", "pending"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Defense by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/defenses/{{defense_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "{{defense_id}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate Prerequisites (ADMIN)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/defenses/{{defense_id}}/validate-prerequisites?approved=true&comment=Tous les prérequis sont remplis : 5 publications, 3 conférences, 300h de formation",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "{{defense_id}}", "validate-prerequisites"],
+							"query": [
+								{
+									"key": "approved",
+									"value": "true"
+								},
+								{
+									"key": "comment",
+									"value": "Tous les prérequis sont remplis : 5 publications, 3 conférences, 300h de formation"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authorize Defense (ADMIN)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/defenses/{{defense_id}}/authorize?authorized=true&defenseDate=2025-09-15T14:00:00&location=Amphithéâtre A&room=Bâtiment Principal&comment=Soutenance autorisée",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "{{defense_id}}", "authorize"],
+							"query": [
+								{
+									"key": "authorized",
+									"value": "true"
+								},
+								{
+									"key": "defenseDate",
+									"value": "2025-09-15T14:00:00"
+								},
+								{
+									"key": "location",
+									"value": "Amphithéâtre A"
+								},
+								{
+									"key": "room",
+									"value": "Bâtiment Principal"
+								},
+								{
+									"key": "comment",
+									"value": "Soutenance autorisée"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Record Final Result (ADMIN)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/defenses/{{defense_id}}/result?result=ACCEPTED&mention=TRES_HONORABLE&remarks=Excellente soutenance, travail de qualité exceptionnelle",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "{{defense_id}}", "result"],
+							"query": [
+								{
+									"key": "result",
+									"value": "ACCEPTED",
+									"description": "ACCEPTED, ACCEPTED_WITH_CORRECTIONS, REJECTED, POSTPONED"
+								},
+								{
+									"key": "mention",
+									"value": "TRES_HONORABLE"
+								},
+								{
+									"key": "remarks",
+									"value": "Excellente soutenance, travail de qualité exceptionnelle"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2.5 Rapporteurs & Jury",
+			"description": "Gestion des rapporteurs et composition du jury",
+			"item": [
+				{
+					"name": "Propose Jury (DIRECTEUR_THESE)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    console.log('✅ Jury proposé - Rapporteurs créés');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{directeur_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{directeur_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"president\": {\n    \"professorId\": {{admin_id}},\n    \"name\": \"Prof. Hassan ALAMI\",\n    \"institution\": \"ENSIAS Rabat\",\n    \"grade\": \"Professeur de l'enseignement supérieur\",\n    \"email\": \"hassan.alami@ensias.ma\",\n    \"role\": \"PRESIDENT\"\n  },\n  \"examiners\": [\n    {\n      \"professorId\": {{directeur_id}},\n      \"name\": \"Dr. Fatima BENNANI\",\n      \"institution\": \"FST Fès\",\n      \"grade\": \"Professeur habilité\",\n      \"email\": \"f.bennani@fst.ma\",\n      \"role\": \"EXAMINER\"\n    }\n  ],\n  \"rapporteurs\": [\n    {\n      \"professorId\": {{admin_id}},\n      \"name\": \"Prof. Mohammed TAZI\",\n      \"institution\": \"Université Mohammed V\",\n      \"grade\": \"Professeur\",\n      \"email\": \"m.tazi@um5.ma\"\n    },\n    {\n      \"professorId\": {{directeur_id}},\n      \"name\": \"Prof. Amina LAKHDISSI\",\n      \"institution\": \"INPT Rabat\",\n      \"grade\": \"Professeur\",\n      \"email\": \"a.lakhdissi@inpt.ma\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/defenses/{{defense_id}}/jury",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "{{defense_id}}", "jury"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Jury Members",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/defenses/{{defense_id}}/jury/members",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "{{defense_id}}", "jury", "members"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate Jury (ADMIN)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/defenses/{{defense_id}}/jury/validate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "{{defense_id}}", "jury", "validate"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Rapporteur Report (DIRECTEUR_THESE)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{directeur_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"report\": \"Le candidat démontre une excellente maîtrise du sujet. Les contributions scientifiques sont significatives et bien documentées. Le manuscrit est de qualité et mérite d'être soutenu.\",\n  \"reportFilePath\": \"/documents/rapporteur_report_1.pdf\",\n  \"opinion\": \"FAVORABLE\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/rapporteurs/1/report",
+							"host": ["{{base_url}}"],
+							"path": ["api", "rapporteurs", "1", "report"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Rapporteurs by Defense",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/rapporteurs/defense/{{defense_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "rapporteurs", "defense", "{{defense_id}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Defense Statistics (ADMIN)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/defenses/statistics",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "statistics"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2.6 Gestion des Documents",
+			"description": "Upload, download et gestion des documents (PDF thèse, rapports, CV)",
+			"item": [
+				{
+					"name": "Upload Document (DOCTORANT)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{doctorant_id}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "type",
+									"value": "MANUSCRIPT",
+									"type": "text"
+								},
+								{
+									"key": "entityId",
+									"value": "{{defense_id}}",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Manuscrit de thèse - Version finale",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/documents/upload",
+							"host": ["{{base_url}}"],
+							"path": ["api", "documents", "upload"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Documents by Entity",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/documents/entity/{{defense_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "documents", "entity", "{{defense_id}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Documents",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{doctorant_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/documents/my",
+							"host": ["{{base_url}}"],
+							"path": ["api", "documents", "my"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Document",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{doctorant_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/documents/1/download",
+							"host": ["{{base_url}}"],
+							"path": ["api", "documents", "1", "download"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Required Documents",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/documents/entity/{{defense_id}}/validate?types=MANUSCRIPT&types=PLAGIARISM_REPORT",
+							"host": ["{{base_url}}"],
+							"path": ["api", "documents", "entity", "{{defense_id}}", "validate"],
+							"query": [
+								{
+									"key": "types",
+									"value": "MANUSCRIPT"
+								},
+								{
+									"key": "types",
+									"value": "PLAGIARISM_REPORT"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Document",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{doctorant_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/documents/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "documents", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Workflow Candidature Doctorat",
+			"description": "Cycle complet : Campagne → Candidature → Évaluation → Approbation",
+			"item": [
+				{
+					"name": "Create Campaign (ADMIN)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('campaign_id', response.id);",
+									"    console.log('✅ Campagne créée - ID:', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Campagne de Recrutement 2025\",\n  \"description\": \"Campagne de recrutement des doctorants pour l'année académique 2025-2026\",\n  \"type\": \"INSCRIPTION\",\n  \"academicYear\": 2025,\n  \"startDate\": \"2025-01-01T00:00:00\",\n  \"endDate\": \"2025-03-31T23:59:59\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/campaigns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "campaigns"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Campaigns",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{candidat_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/campaigns",
+							"host": ["{{base_url}}"],
+							"path": ["api", "campaigns"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Registration (CANDIDAT)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('application_id', response.id);",
+									"    console.log('✅ Candidature soumise - ID:', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{candidat_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{candidat_id}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"campaignId\": {{campaign_id}},\n  \"type\": \"INSCRIPTION\",\n  \"thesisTitle\": \"Application de l'IA à la détection des fraudes\",\n  \"thesisDescription\": \"Cette thèse vise à développer des modèles d'apprentissage automatique pour détecter les fraudes financières en temps réel.\",\n  \"researchField\": \"Intelligence Artificielle\",\n  \"directorId\": {{directeur_id}},\n  \"laboratory\": \"LIMI - EMSI\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/registrations",
+							"host": ["{{base_url}}"],
+							"path": ["api", "registrations"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review Application (DIRECTEUR_THESE)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{directeur_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{directeur_id}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"approved\": true,\n  \"comments\": \"Bon profil, expérience pertinente en intelligence artificielle\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/registrations/{{application_id}}/review/director",
+							"host": ["{{base_url}}"],
+							"path": ["api", "registrations", "{{application_id}}", "review", "director"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approve Application (ADMIN)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"approved\": true,\n  \"comments\": \"Candidature approuvée après examen du dossier\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/registrations/{{application_id}}/review/admin",
+							"host": ["{{base_url}}"],
+							"path": ["api", "registrations", "{{application_id}}", "review", "admin"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Gestion des Utilisateurs",
+			"description": "Consultation et gestion des utilisateurs du système",
+			"item": [
+				{
+					"name": "Get All Users (ADMIN)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users/{{admin_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "{{admin_id}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5. Gestion des Notifications",
+			"description": "Consultation et gestion des notifications utilisateur",
+			"item": [
+				{
+					"name": "Send Test Notification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{doctorant_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/registrations/send-test-notification",
+							"host": ["{{base_url}}"],
+							"path": ["api", "registrations", "send-test-notification"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{doctorant_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/notifications/my",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notifications", "my"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Unread Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{doctorant_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/notifications/unread-count",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notifications", "unread-count"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Notification as Read",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-User-Id",
+								"value": "{{doctorant_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/notifications/1/read",
+							"host": ["{{base_url}}"],
+							"path": ["api", "notifications", "1", "read"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "6. Tests Sécurité RBAC",
+			"description": "Tests de contrôle d'accès - Doivent retourner 403 Forbidden",
+			"item": [
+				{
+					"name": "CANDIDAT Create Defense (403 Expected)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{candidat_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"thesisTitle\": \"Test\",\n  \"thesisAbstract\": \"Test\",\n  \"researchField\": \"Test\",\n  \"laboratory\": \"Test\",\n  \"directorId\": 1,\n  \"publicationsCount\": 0,\n  \"conferencesCount\": 0,\n  \"trainingHours\": 0,\n  \"proposedDate\": \"2025-12-31T10:00:00\",\n  \"academicYear\": 2025\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/defenses",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DOCTORANT Validate Prerequisites (403 Expected)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{doctorant_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"approved\": true,\n  \"comments\": \"Test\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/defenses/{{defense_id}}/validate-prerequisites",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses", "{{defense_id}}", "validate-prerequisites"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CANDIDAT Get All Users (403 Expected)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{candidat_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "7. Tests Authentification",
+			"description": "Tests d'erreurs d'authentification - Doivent retourner 401 Unauthorized",
+			"item": [
+				{
+					"name": "No Token (401 Expected)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/defenses",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Token (401 Expected)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer invalid_token_xyz123",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/defenses",
+							"host": ["{{base_url}}"],
+							"path": ["api", "defenses"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,139 @@
+# src/main/resources/application.yml
+
+spring:
+  application:
+    name: defense-service
+  
+  datasource:
+    url: jdbc:h2:mem:defensedb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # Ou 'update' pour conserver les donnees
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#    consumer:
+#      group-id: defense-service-group
+#      auto-offset-reset: earliest
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      properties:
+#        spring.json.trusted.packages: "*"
+
+  # Kafka Configuration - TEMPORARILY DISABLED
+  kafka:
+    enabled: false  # Désactiver Kafka temporairement
+    bootstrap-servers: localhost:29094  # Chang� de 39093 � 29094
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+      retries: 3
+      acks: all
+    consumer:
+      group-id: defense-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+      auto-offset-reset: earliest
+    admin:
+      properties:
+        request.timeout.ms: 10000
+        default.api.timeout.ms: 15000
+    properties:
+      session.timeout.ms: 30000
+      request.timeout.ms: 30000
+      connections.max.idle.ms: 540000
+  
+  cloud:
+    config:
+      enabled: false
+    
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
+            loggerLevel: basic
+
+server:
+  port: 8083
+
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+user:
+  service:
+    url: http://localhost:8081  # Port du user-service
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+# Document Upload Configuration
+app:
+  document:
+    upload-dir: ./uploads/defense-service
+    max-file-size: 10485760  # 10MB
+
+defense:
+  prerequisites:
+    min-publications: 2
+    min-conferences: 2
+    min-training-hours: 200
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      defenseService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+  retry:
+    instances:
+      defenseService:
+        max-attempts: 3
+        waitDuration: 1s
+
+logging:
+  level:
+    ma.spring.defenseservice: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

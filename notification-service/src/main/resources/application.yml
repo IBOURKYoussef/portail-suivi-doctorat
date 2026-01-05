@@ -1,0 +1,196 @@
+spring:
+  application:
+    name: notification-service
+
+  config:
+    import: "optional:configserver:http://localhost:8888"
+
+  profiles:
+    active: dev
+
+  # ========== KAFKA CONFIGURATION CORRIG�E ==========
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29094}
+    consumer:
+      group-id: notification-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: java.util.LinkedHashMap
+      auto-offset-reset: earliest    # Configuration pour g�rer les erreurs de d�s�rialisation
+    properties:
+      spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+
+  # ========== EMAIL CONFIGURATION ==========
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME:youssefibourk322@gmail.com}
+    password: ${EMAIL_PASSWORD:uvwd nojw dnvw kgmm}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+        debug: true  # ? Activer pour le d�bogage
+
+  # Configuration JPA
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+
+  datasource:
+    url: jdbc:h2:mem:notificationdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+server:
+  port: 8084
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    ma.spring.notificationservice: DEBUG
+    org.springframework.kafka: DEBUG
+    org.springframework.mail: DEBUG
+    org.apache.kafka: WARN
+
+#spring:
+#  application:
+#    name: notification-service
+#  main:
+#    allow-bean-definition-overriding: true
+#
+#  config:
+#    import: "optional:configserver:http://localhost:8888"
+#
+#  profiles:
+#    active: dev
+#
+#  # ========== KAFKA CONFIGURATION ==========
+#  kafka:
+#    bootstrap-servers: localhost:29094
+#    consumer:
+#      group-id: notification-service
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      properties:
+#        spring.json.trusted.packages: "*"
+#      auto-offset-reset: earliest
+#
+#  # ========== EMAIL CONFIGURATION ==========
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ${EMAIL_USERNAME:youssefibourk322@gmail.com}
+#    password: ${EMAIL_PASSWORD:uvwd nojw dnvw kgmm}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#        debug: false
+#
+#  # ========== DATABASE CONFIGURATION ==========
+#  datasource:
+#    url: jdbc:h2:mem:notificationdb
+#    driverClassName: org.h2.Driver
+#    username: sa
+#    password:
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        dialect: org.hibernate.dialect.H2Dialect
+#    defer-datasource-initialization: true  # ? Important
+#
+#  sql:
+#    init:
+#      mode: always  # ? Toujours ex�cuter les scripts d'initialisation
+#      continue-on-error: false
+#
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#
+#server:
+#  port: 8084
+#
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    serviceUrl:
+#      defaultZone: http://localhost:8761/eureka/
+#
+#logging:
+#  level:
+#    ma.spring.notificationservice: DEBUG
+#    org.springframework.kafka: INFO
+#    org.springframework.mail: DEBUG
+#
+#---
+## Profil de production
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/doctorat_notifications
+#    username: ${DB_USERNAME:postgres}
+#    password: ${DB_PASSWORD:postgres}
+#    driver-class-name: org.postgresql.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
+#    show-sql: false
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#
+#  kafka:
+#    bootstrap-servers: kafka:29092
+#
+#server:
+#  port: 8084
+#
+#logging:
+#  level:
+#    ma.spring.notificationservice: INFO

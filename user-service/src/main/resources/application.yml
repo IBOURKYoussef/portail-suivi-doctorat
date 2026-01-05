@@ -1,0 +1,106 @@
+spring:
+  application:
+    name: user-service
+
+  config:
+    import: "optional:configserver:http://localhost:8888"
+
+  profiles:
+    active: dev
+
+---
+# Profil de développement
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:h2:mem:userdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+server:
+  port: 8081
+
+# Configuration JWT
+jwt:
+  secret: myVerySecureSecretKeyForJWTTokenGenerationThatIsAtLeast256BitsLong
+  expiration: 86400000  # 24 heures
+
+# Configuration du compte administrateur par défaut
+app:
+  admin:
+    username: admin
+    password: Admin@123
+    email: admin@doctorat.ma
+
+eureka:
+  instance:
+    prefer-ip-address: false
+    hostname: localhost
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    ma.spring.userservice: DEBUG
+    org.springframework.security: DEBUG
+
+---
+# Profil de production
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/doctorat_users
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+server:
+  port: 8081
+
+logging:
+  level:
+    ma.spring.userservice: INFO
+    org.springframework.security: WARN
