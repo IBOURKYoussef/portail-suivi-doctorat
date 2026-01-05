@@ -1,6 +1,7 @@
 spring:
   application:
     name: api-gateway
+<<<<<<< HEAD
   cloud:
     gateway:
       routes:
@@ -132,3 +133,7 @@ logging:
     org.springframework.web.reactive: DEBUG
     reactor.netty: DEBUG
     ma.spring.cloud.apigateway: DEBUG
+=======
+  config:
+    import: "optional:configserver:http://localhost:8888"
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5

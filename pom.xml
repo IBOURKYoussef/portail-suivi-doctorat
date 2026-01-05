@@ -24,12 +24,21 @@
     <description>microservices-new</description>
 
     <modules>
+<<<<<<< HEAD
         <module>discovery-server</module>
         <module>api-gateway</module>
         <module>config-server</module>
         <module>user-service</module>
         <module>registration-service</module>
         <module>notification-service</module>
+=======
+        <module>product-service</module>
+        <module>order-service</module>
+        <module>inventory-service</module>
+        <module>discovery-server</module>
+        <module>api-gateway</module>
+        <module>config-server</module>
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
     </modules>
 
     <properties>

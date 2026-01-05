@@ -1,5 +1,6 @@
 package ma.spring.userservice.controller;
 
+<<<<<<< HEAD
 import jakarta.validation.Valid;
 import ma.spring.userservice.config.JwtTokenProvider;
 import ma.spring.userservice.dto.*;
@@ -8,6 +9,15 @@ import ma.spring.userservice.model.UserRole;
 import ma.spring.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+=======
+import ma.spring.userservice.config.JwtTokenProvider;
+import ma.spring.userservice.dto.JwtAuthenticationResponse;
+import ma.spring.userservice.dto.LoginRequest;
+import ma.spring.userservice.dto.RegisterRequest;
+import ma.spring.userservice.model.User;
+import ma.spring.userservice.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +26,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+<<<<<<< HEAD
 import java.util.HashMap;
 import java.util.Map;
 
+=======
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -36,6 +49,7 @@ public class AuthController {
     private JwtTokenProvider tokenProvider;
 
     @PostMapping("/login")
+<<<<<<< HEAD
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -167,3 +181,39 @@ public class AuthController {
         return ResponseEntity.ok(userResponse);
     }
 }
+=======
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.generateToken(authentication);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
+        if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
+            return ResponseEntity.badRequest().body("Username is already taken!");
+        }
+
+        User user = new User();
+        user.setUsername(registerRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setRole("DOCTORANT"); // Rôle par défaut
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok("User registered successfully!");
+    }
+}
+
+
+
+
+
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5

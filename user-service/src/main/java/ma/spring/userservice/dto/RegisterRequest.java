@@ -1,5 +1,6 @@
 package ma.spring.userservice.dto;
 
+<<<<<<< HEAD
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -36,3 +37,10 @@ public class RegisterRequest {
     private String laboratoire; // Pour DIRECTEUR_THESE
     private String grade; // Pour DIRECTEUR_THESE
 }
+=======
+@lombok.Getter @lombok.Setter
+public class RegisterRequest {
+    private String username;
+    private String password;
+}
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5

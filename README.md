@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎓 Application de Gestion Doctorale - Microservices
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-brightgreen.svg)](https://spring.io/projects/spring-boot)
@@ -459,3 +460,6 @@ Voir aussi la liste des [contributeurs](https://github.com/votre-repo/contributo
 <div align="center">
   <b>⭐ Si ce projet vous a aidé, n'hésitez pas à lui donner une étoile ! ⭐</b>
 </div>
+=======
+# portail-suivi-doctorat
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5

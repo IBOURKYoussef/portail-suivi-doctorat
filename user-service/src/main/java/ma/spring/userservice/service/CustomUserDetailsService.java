@@ -3,16 +3,24 @@ package ma.spring.userservice.service;
 import ma.spring.userservice.model.User;
 import ma.spring.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+=======
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+<<<<<<< HEAD
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+=======
+
+import java.util.Collections;
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -21,6 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
+<<<<<<< HEAD
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
@@ -68,3 +77,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         );
     }
 }
+=======
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        // Return Spring Security UserDetails object
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                Collections.emptyList()  // No roles for now
+        );
+    }
+}
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5

@@ -1,5 +1,6 @@
 package ma.spring.userservice.model;
 
+<<<<<<< HEAD
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -58,4 +59,23 @@ public class User {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+=======
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+
+@Entity
+@Table(name = "users") // <---- FIX: avoid reserved keyword
+@Data // Lombok pour générer getters, setters, etc.
+public class User {
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String username;
+    private String password;
+    private String role; // Ex: "DOCTORANT", "ADMINISTRATIF"
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
 }

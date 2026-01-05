@@ -1,5 +1,6 @@
 package ma.spring.userservice.dto;
 
+<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,5 +16,14 @@ public class JwtAuthenticationResponse {
     public JwtAuthenticationResponse(String accessToken) {
         this.accessToken = accessToken;
         this.tokenType = "Bearer";
+=======
+@lombok.AllArgsConstructor
+@lombok.Getter
+public class JwtAuthenticationResponse {
+    private String accessToken;
+    private String tokenType = "Bearer";
+    public JwtAuthenticationResponse(String accessToken) {
+        this.accessToken = accessToken;
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
     }
 }

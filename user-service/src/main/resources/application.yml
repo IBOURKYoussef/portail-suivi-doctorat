@@ -1,6 +1,7 @@
 spring:
   application:
     name: user-service
+<<<<<<< HEAD
 
   config:
     import: "optional:configserver:http://localhost:8888"
@@ -15,17 +16,25 @@ spring:
     activate:
       on-profile: dev
 
+=======
+  config:
+    import: "optional:configserver:http://localhost:8888"
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
   datasource:
     url: jdbc:h2:mem:userdb
     driverClassName: org.h2.Driver
     username: sa
     password:
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
   h2:
     console:
       enabled: true
       path: /h2-console
 
+<<<<<<< HEAD
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -55,11 +64,20 @@ eureka:
     prefer-ip-address: false
     hostname: localhost
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+=======
+server:
+  port: 8081
+
+eureka:
+  instance:
+    prefer-ip-address: true
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
   client:
     register-with-eureka: true
     fetch-registry: true
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+<<<<<<< HEAD
 
 management:
   endpoints:
@@ -104,3 +122,5 @@ logging:
   level:
     ma.spring.userservice: INFO
     org.springframework.security: WARN
+=======
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5

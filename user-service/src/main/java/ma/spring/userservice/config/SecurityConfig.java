@@ -45,6 +45,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+<<<<<<< HEAD
                         // Tous les endpoints sont accessibles
                         // La sécurité est gérée par l'API Gateway
                         .anyRequest().permitAll()
@@ -56,3 +57,15 @@ public class SecurityConfig {
         return http.build();
     }
 }
+=======
+                        .requestMatchers("/auth/register", "/auth/login", "/h2-console/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+                .authenticationProvider(authenticationProvider()); // ✅ Add this line
+
+        return http.build();
+    }
+}
+>>>>>>> 6ce757d4999ba41a617273a4b88fa27aebe5c2f5
